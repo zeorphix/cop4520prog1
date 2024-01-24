@@ -3,15 +3,18 @@
 // Spring 2024
 
 #include <chrono>
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <thread>
 #include <vector>
 
 using namespace std;
 
-constexpr int NUM_THREADS = 8;
-constexpr int MAX = 100000000;
+const int NUM_THREADS = 8;
+const int MIN = 1;
+const int MAX = 100000000;
+const int SEGMENT_SIZE = MAX / NUM_THREADS;
+
 int totalPrimes = 0;
 long long sumPrimes = 0;
 
@@ -25,8 +28,6 @@ long long sumPrimes = 0;
 //   <top ten maximum primes, listed in order from lowest to highest>
 
 //  DON'T INCLUDE ZERO OR ONE IN PRIMES FOUND
-//  execution time should start prior to spawning the threads 
-//  and end after all threads  complete
 
 bool isPrime(int num) {
     if (num <=1)
@@ -49,12 +50,16 @@ int main(void)
 
     std::cout << "Hello World!" << endl;
 
+    // Execution start time prior to thread spawn
+    
     auto startTime = std::chrono::high_resolution_clock::now();
     
     std::vector<std::thread> threads;
 
     for (int i = 0; i < NUM_THREADS; ++i)
     {
+        int start = MIN + i * SEGMENT_SIZE;
+        int end = start + SEGMENT_SIZE;
         threads.push_back(std::thread(sieve, i));
     }
 
@@ -63,6 +68,8 @@ int main(void)
     
     auto endTime = std::chrono::high_resolution_clock::now();
     
+    // Execution end time after all threads complete
+
     std::chrono::duration<double, std::milli> executionTime = endTime - startTime;
 
     // std::thread t1(sieve, num);
