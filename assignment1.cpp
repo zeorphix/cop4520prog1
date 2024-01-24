@@ -10,7 +10,8 @@
 
 using namespace std;
 
-const int NUM_THREADS = 8;
+constexpr int NUM_THREADS = 8;
+constexpr int MAX = 100000000;
 int totalPrimes = 0;
 long long sumPrimes = 0;
 
@@ -26,6 +27,17 @@ long long sumPrimes = 0;
 //  DON'T INCLUDE ZERO OR ONE IN PRIMES FOUND
 //  execution time should start prior to spawning the threads 
 //  and end after all threads  complete
+
+bool isPrime(int num) {
+    if (num <=1)
+        return false;
+
+    for (int i = 2; i <= sqrt(num); ++i)
+        if (n % i = 0)
+            return false;
+    
+    return true;
+}
 
 void sieve(int num) 
 {
@@ -46,10 +58,11 @@ int main(void)
         threads.push_back(std::thread(sieve, i));
     }
 
-    for (auto& thread : threads)
-        thread.join();
+    for (auto& t : threads)
+        t.join();
     
     auto endTime = std::chrono::high_resolution_clock::now();
+    
     std::chrono::duration<double, std::milli> executionTime = endTime - startTime;
 
     // std::thread t1(sieve, num);
