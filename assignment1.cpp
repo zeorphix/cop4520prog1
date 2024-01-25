@@ -3,20 +3,13 @@
 // Spring 2024
 
 #include <chrono>
+#include <cmath>
 #include <fstream>
 #include <iostream>
 #include <thread>
 #include <vector>
 
 using namespace std;
-
-const int NUM_THREADS = 8;
-const int MIN = 1;
-const int MAX = 100000000;
-const int SEGMENT_SIZE = MAX / NUM_THREADS;
-
-int totalPrimes = 0;
-long long sumPrimes = 0;
 
 // - spawn 8 threads that will perform the necessary computation
 
@@ -29,24 +22,33 @@ long long sumPrimes = 0;
 
 //  DON'T INCLUDE ZERO OR ONE IN PRIMES FOUND
 
+// Calculates if a given number is prime or not
 bool isPrime(int num) {
-    if (num <=1)
+    if (num <= 1)
         return false;
 
     for (int i = 2; i <= sqrt(num); ++i)
-        if (n % i = 0)
+        if (num % i == 0)
             return false;
     
     return true;
 }
 
-void sieve(int num) 
+// Algorithm to find all primes within a certain range
+void sieve(int start, int end) 
 {
-    std::cout << num << endl;
+    std::cout << start << " + " << end << endl;
 }
 
 int main(void) 
 {
+    const int NUM_THREADS = 8;
+    const int MIN = 1;
+    const int MAX = 100000000;
+    const int SEGMENT_SIZE = (MAX - MIN + 1) / NUM_THREADS;
+
+    int totalPrimes = 0;
+    long long sumPrimes = 0;
 
     std::cout << "Hello World!" << endl;
 
@@ -59,8 +61,8 @@ int main(void)
     for (int i = 0; i < NUM_THREADS; ++i)
     {
         int start = MIN + i * SEGMENT_SIZE;
-        int end = start + SEGMENT_SIZE;
-        threads.push_back(std::thread(sieve, i));
+        int end = start + SEGMENT_SIZE - 1;
+        threads.push_back(std::thread(sieve, start, end));
     }
 
     for (auto& t : threads)
