@@ -26,7 +26,7 @@ bool isPrime(int num)
 {
     // 0 and 1 are not prime (nor composite).
     // Skip even numbers.
-    if (num <= 1 || num > 2 && num % 2 == 0)
+    if (num < 2 || num % 2 == 0)
         return false;
 
     // Start from 3 as we already have cases for <= 2.
@@ -44,9 +44,12 @@ void sieve(int start, int end)
 {
     using namespace std;
 
+    // Initialize local variables for our current thread.
     int total = 0;
     long long sum = 0;
 
+    // Loop through the range of numbers, checking for primality.
+    // Skip even numbers.
     for (int i = (start % 2 == 0) ? start + 1 : start; i <= end; i += 2)
     {
         if (isPrime(i))
@@ -56,6 +59,7 @@ void sieve(int start, int end)
         }      
     }
 
+    // Protect the updated variables.
     lock_guard<mutex> lock(mtx);
     totalNumPrimes += total;
     sumPrimes += sum;
@@ -70,7 +74,7 @@ int main(void)
     
     vector<thread> threads;
 
-    // Spawn 8 threads, each sieving a portion of the total range.
+    // Spawn threads, each sieving a portion of the total range.
 	// Each thread has an equivalent workload of range.
     for (int i = 0; i < NUM_THREADS; ++i)
     {
@@ -79,6 +83,7 @@ int main(void)
         threads.push_back(thread(sieve, start, end));
     }
 
+    // Merge threads afterwards.
     for (auto& t : threads)
         t.join();
 
@@ -87,7 +92,11 @@ int main(void)
 
     chrono::duration<double, milli> executionTime = endTime - startTime;
 
-    //  DON'T INCLUDE ZERO OR ONE IN PRIMES FOUND
+    // We skip the number 2 in our sieve algorithm.
+    // So, include that in the total number and sum.
+    ++totalNumPrimes;
+    sumPrimes += 2;
+    
     // - output to primes.txt
     //   <execution time> <total number of primes found> <sum of all primes found>
     //   <top ten maximum primes, listed in order from lowest to highest>
