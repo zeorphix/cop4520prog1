@@ -31,7 +31,7 @@ bool isPrime(int num)
 
     // Start from 3 as we already have cases for <= 2.
     // Use sieve to check if a number is prime, skipping even numbers.
-    for (int i = 3; i <= sqrt(num); i += 2)
+    for (int i = 3; i*i <= num; i += 2)
         if (num % i == 0)
             return false;
     
@@ -42,26 +42,28 @@ bool isPrime(int num)
 // Algorithm to find all primes within a certain range.
 void sieve(int start, int end) 
 {
+    using namespace std;
+
     int total = 0;
-    int sum = 0;
+    long long sum = 0;
 
     for (int i = (start % 2 == 0) ? start + 1 : start; i <= end; i += 2)
     {
         if (isPrime(i))
         {
-            ++total;
+            total++;
             sum += i;
         }      
     }
 
+    lock_guard<mutex> lock(mtx);
+    totalNumPrimes += total;
+    sumPrimes += sum;
 }
 
 int main(void) 
 {
-    // Let's make it easier to type.
     using namespace std;
-
-    cout << "Hello World!" << endl;
 
     // Execution start time prior to thread spawn.
     auto startTime = chrono::high_resolution_clock::now();
@@ -90,8 +92,9 @@ int main(void)
     //   <execution time> <total number of primes found> <sum of all primes found>
     //   <top ten maximum primes, listed in order from lowest to highest>
 
-    cout << executionTime.count() << " ms" << endl;
-    cout << "SUM " << sumPrimes << endl;
+    cout << "< " << executionTime.count() << " ms" << " > ";
+    cout << "< "<< "TOTAL NUM " << totalNumPrimes << " > ";
+    cout << "< " << "SUM " << sumPrimes << " >" << endl;
     
     return 0;
 }
