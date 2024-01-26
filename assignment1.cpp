@@ -16,46 +16,50 @@ const int MIN = 1;
 const int MAX = 100000000;
 const int SEGMENT_SIZE = (MAX - MIN + 1) / NUM_THREADS;
 
-int totalPrimes = 0;
+int totalNumPrimes = 0;
 long long sumPrimes = 0;
 
-// Calculates if a given number is prime or not
+std::mutex mtx;
+
+// Calculates if a given number is prime or not.
 bool isPrime(int num) 
 {
+    // 0 and 1 are not prime (nor composite).
+    // Skip even numbers.
     if (num <= 1 || num > 2 && num % 2 == 0)
         return false;
 
+    // Start from 3 as we already have cases for <= 2.
+    // Use sieve to check if a number is prime, skipping even numbers.
     for (int i = 3; i <= sqrt(num); i += 2)
         if (num % i == 0)
             return false;
     
+    // Our number is prime!
     return true;
 }
 
-// Algorithm to find all primes within a certain range
-void sieve(int start, int end, std::vector<std::vector<int>>& primes) 
+// Algorithm to find all primes within a certain range.
+void sieve(int start, int end) 
 {
-    using namespace std;
-
-    cout << start << " + " << end << endl;
+    int total = 0;
+    int sum = 0;
 
     for (int i = (start % 2 == 0) ? start + 1 : start; i <= end; i += 2)
+    {
         if (isPrime(i))
-            cout << i << " is prime" << endl;
+        {
+            ++total;
+            sum += i;
+        }      
+    }
 
-    // cout << "is " << start << " prime? " << isPrime(start) << endl;
-    // cout << "is " << end << " prime? " << isPrime(end) << endl;
 }
 
 int main(void) 
 {
     // Let's make it easier to type.
     using namespace std;
-
-    // Initialize a 2D integer vector of length
-    // equivalent to the number of threads.
-    // Each thread has their own list of primes.
-    vector<vector<int>> listPrimes(NUM_THREADS);
 
     cout << "Hello World!" << endl;
 
@@ -70,12 +74,12 @@ int main(void)
     {
         int start = MIN + i * SEGMENT_SIZE;
         int end = start + SEGMENT_SIZE - 1;
-        threads.push_back(thread(sieve, start, end, ref(listPrimes)));
+        threads.push_back(thread(sieve, start, end));
     }
 
     for (auto& t : threads)
         t.join();
-    
+
     // Execution end time after all threads complete.
     auto endTime = chrono::high_resolution_clock::now();
 
@@ -83,7 +87,7 @@ int main(void)
 
     //  DON'T INCLUDE ZERO OR ONE IN PRIMES FOUND
     // - output to primes.txt
-    //   <execution time> <tot al number of primes found> <sum of all primes found>
+    //   <execution time> <total number of primes found> <sum of all primes found>
     //   <top ten maximum primes, listed in order from lowest to highest>
 
     cout << executionTime.count() << " ms" << endl;
