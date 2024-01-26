@@ -5,6 +5,7 @@
 #include <chrono>
 #include <cmath>
 #include <fstream>
+#include <functional>
 #include <iostream>
 #include <mutex>
 #include <thread>
@@ -32,14 +33,18 @@ bool isPrime(int num)
 }
 
 // Algorithm to find all primes within a certain range
-void sieve(int start, int end) 
+void sieve(int start, int end, std::vector<std::vector<int>>& primes) 
 {
     using namespace std;
 
     cout << start << " + " << end << endl;
 
-    cout << "is " << start << " prime? " << isPrime(start) << endl;
-    cout << "is " << end << " prime? " << isPrime(end) << endl;
+    for (int i = (start % 2 == 0) ? start + 1 : start; i <= end; i += 2)
+        if (isPrime(i))
+            cout << i << " is prime" << endl;
+
+    // cout << "is " << start << " prime? " << isPrime(start) << endl;
+    // cout << "is " << end << " prime? " << isPrime(end) << endl;
 }
 
 int main(void) 
@@ -65,7 +70,7 @@ int main(void)
     {
         int start = MIN + i * SEGMENT_SIZE;
         int end = start + SEGMENT_SIZE - 1;
-        threads.push_back(std::thread(sieve, start, end));
+        threads.push_back(thread(sieve, start, end, ref(listPrimes)));
     }
 
     for (auto& t : threads)
