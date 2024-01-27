@@ -17,5 +17,6 @@ I optimized my program for efficiency dividing the range across multiple threads
 
 - Instructions
 1. Download 'assignment1.cpp'
-2. Compile by typing 'g++ assignment1.cpp'
-3. Execute the file by typing './a.out'
+2. Move file to directory of your choice
+3. Compile by typing 'g++ assignment1.cpp'
+4. Execute the file by typing './a.out'
