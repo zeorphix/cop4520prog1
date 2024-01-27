@@ -111,6 +111,8 @@ int main(void)
 {
     using namespace std;
 
+    cout << "Finding all primes between " << MIN << " and " << MAX << "..." << endl;
+
     // Execution start time prior to thread spawn.
     auto startTime = chrono::high_resolution_clock::now();
     
@@ -148,6 +150,8 @@ int main(void)
     
     // Finally, write our output to 'primes.txt'.
     printPrimes();
+
+    cout << "All primes found. Output written to 'primes.txt'." << endl;
 
     return 0;
 }
