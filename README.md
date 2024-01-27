@@ -13,7 +13,7 @@ I optimized my program for efficiency dividing the range across multiple threads
 
 - Experimental Evaluation
 
-10^5, 10^8, ...
+I tested my program with different values, such as 10^5 and 10^10, cross-checking with the methods described above (Prime Counting Calculator, prime number theorem) for approximate values for total number of primes and sum of all primes.
 
 - Instructions
 1. Download 'assignment1.cpp'
