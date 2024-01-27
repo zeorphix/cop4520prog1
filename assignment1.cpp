@@ -65,6 +65,11 @@ void sieve(int start, int end)
     sumPrimes += sum;
 }
 
+void findTopTenPrimes(int min, int max)
+{
+    
+}
+
 int main(void) 
 {
     using namespace std;
@@ -125,22 +130,23 @@ int main(void)
     outFile << "<" << totalNumPrimes << "> ";
     outFile << "<" << sumPrimes << ">" << endl;
     
+    outFile << "< ";
     for (int prime : topTenPrimes)
         outFile << prime << " ";
 
-    outFile << endl;
+    outFile << ">" << endl;
 
     // Debugging prints
-    cout << "< " << executionTime.count() << " ms" << " > ";
-    cout << "< "<< "TOTAL NUM " << totalNumPrimes << " > ";
-    cout << "< " << "SUM " << sumPrimes << " >" << endl;
+    // cout << "< " << executionTime.count() << " ms" << " > ";
+    // cout << "< "<< "TOTAL NUM " << totalNumPrimes << " > ";
+    // cout << "< " << "SUM " << sumPrimes << " >" << endl;
     
-    cout << "top ten primes" << endl;
+    // cout << "top ten primes" << endl;
 
-    for (int prime : topTenPrimes)
-        cout << prime << " ";
+    // for (int prime : topTenPrimes)
+    //     cout << prime << " ";
 
-    cout << endl;
+    // cout << endl;
 
     // Don't forget to close file.
     outFile.close();
