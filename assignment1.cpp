@@ -126,7 +126,9 @@ int main(void)
     outFile << "<" << sumPrimes << ">" << endl;
     
     for (int prime : topTenPrimes)
-        outFile << prime << endl;
+        outFile << prime << " ";
+
+    outFile << endl;
 
     // Debugging prints
     cout << "< " << executionTime.count() << " ms" << " > ";
@@ -136,8 +138,10 @@ int main(void)
     cout << "top ten primes" << endl;
 
     for (int prime : topTenPrimes)
-        cout << prime << endl;
-    
+        cout << prime << " ";
+
+    cout << endl;
+
     // Don't forget to close file.
     outFile.close();
 
