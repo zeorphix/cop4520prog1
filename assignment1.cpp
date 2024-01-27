@@ -92,18 +92,54 @@ int main(void)
 
     chrono::duration<double, milli> executionTime = endTime - startTime;
 
-    // We skip the number 2 in our sieve algorithm.
+    // We skip the number 2 in our algorithm.
     // So, include that in the total number and sum.
     ++totalNumPrimes;
     sumPrimes += 2;
-    
-    // - output to primes.txt
-    //   <execution time> <total number of primes found> <sum of all primes found>
-    //   <top ten maximum primes, listed in order from lowest to highest>
 
+    // Now find the top ten maximum primes in our range,
+    // starting from the biggest number.
+    vector<int> topTenPrimes;
+
+    for (int i = MAX; i >= MIN; --i)
+    {
+        if (isPrime(i))
+        {
+            topTenPrimes.push_back(i);
+            
+            if (topTenPrimes.size() == 10)
+                break;
+        }
+    }
+
+    // Sort the maximum primes from lowest to highest.
+    sort(topTenPrimes.begin(), topTenPrimes.end());
+    
+    //  Write our output to 'primes.txt'.
+    //  <execution time> <total number of primes found> <sum of all primes found>
+    //  <top ten maximum primes, listed in order from lowest to highest>
+
+    ofstream outFile("primes.txt");
+
+    outFile << "<" << executionTime.count() << " ms> ";
+    outFile << "<" << totalNumPrimes << "> ";
+    outFile << "<" << sumPrimes << ">" << endl;
+    
+    for (int prime : topTenPrimes)
+        outFile << prime << endl;
+
+    // Debugging prints
     cout << "< " << executionTime.count() << " ms" << " > ";
     cout << "< "<< "TOTAL NUM " << totalNumPrimes << " > ";
     cout << "< " << "SUM " << sumPrimes << " >" << endl;
     
+    cout << "top ten primes" << endl;
+
+    for (int prime : topTenPrimes)
+        cout << prime << endl;
+    
+    // Don't forget to close file.
+    outFile.close();
+
     return 0;
 }
