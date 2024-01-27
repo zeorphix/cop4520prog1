@@ -19,6 +19,7 @@ const int SEGMENT_SIZE = (MAX - MIN + 1) / NUM_THREADS;
 int totalNumPrimes = 0;
 long long sumPrimes = 0;
 
+std::vector<int> topTenPrimes;
 std::mutex mtx;
 
 // Calculates if a given number is prime or not.
@@ -65,9 +66,30 @@ void sieve(int start, int end)
     sumPrimes += sum;
 }
 
+// Finds and sorts the top ten maximum primes in a range.
 void findTopTenPrimes(int min, int max)
 {
-    
+    for (int i = max; i >= min; --i)
+    {
+        if (isPrime(i))
+        {
+            topTenPrimes.push_back(i);
+            
+            if (topTenPrimes.size() == 10)
+                break;
+        }
+    }
+
+    // Sort the maximum primes from lowest to highest.
+    sort(topTenPrimes.begin(), topTenPrimes.end());
+}
+
+// Prints respective output to "primes.txt".
+//  <execution time> <total number of primes found> <sum of all primes found>
+//  <top ten maximum primes, listed in order from lowest to highest>
+void printPrimes(void)
+{
+
 }
 
 int main(void) 
@@ -102,27 +124,10 @@ int main(void)
     ++totalNumPrimes;
     sumPrimes += 2;
 
-    // Now find the top ten maximum primes in our range,
-    // starting from the biggest number.
-    vector<int> topTenPrimes;
-
-    for (int i = MAX; i >= MIN; --i)
-    {
-        if (isPrime(i))
-        {
-            topTenPrimes.push_back(i);
-            
-            if (topTenPrimes.size() == 10)
-                break;
-        }
-    }
-
-    // Sort the maximum primes from lowest to highest.
-    sort(topTenPrimes.begin(), topTenPrimes.end());
+    // Now find the top ten maximum primes in our range.
+    findTopTenPrimes(MIN, MAX);
     
     //  Write our output to 'primes.txt'.
-    //  <execution time> <total number of primes found> <sum of all primes found>
-    //  <top ten maximum primes, listed in order from lowest to highest>
 
     ofstream outFile("primes.txt");
 
