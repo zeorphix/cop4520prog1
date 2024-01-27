@@ -21,6 +21,7 @@ long long sumPrimes = 0;
 
 std::vector<int> topTenPrimes;
 std::mutex mtx;
+std::chrono::duration<double, std::milli> executionTime;
 
 // Calculates if a given number is prime or not.
 bool isPrime(int num) 
@@ -85,11 +86,25 @@ void findTopTenPrimes(int min, int max)
 }
 
 // Prints respective output to "primes.txt".
-//  <execution time> <total number of primes found> <sum of all primes found>
-//  <top ten maximum primes, listed in order from lowest to highest>
+// <execution time> <total number of primes found> <sum of all primes found>
+// <top ten maximum primes, listed in order from lowest to highest>
 void printPrimes(void)
 {
+    using namespace std;
 
+    ofstream outFile("primes.txt");
+
+    outFile << "<" << executionTime.count() << " ms> ";
+    outFile << "<" << totalNumPrimes << "> ";
+    outFile << "<" << sumPrimes << ">" << endl;
+    
+    outFile << "< ";
+    for (int prime : topTenPrimes)
+        outFile << prime << " ";
+
+    outFile << ">" << endl;
+
+    outFile.close();
 }
 
 int main(void) 
@@ -117,7 +132,7 @@ int main(void)
     // Execution end time after all threads complete.
     auto endTime = chrono::high_resolution_clock::now();
 
-    chrono::duration<double, milli> executionTime = endTime - startTime;
+    executionTime = endTime - startTime;
 
     // We skip the number 2 in our algorithm.
     // So, include that in the total number and sum.
@@ -127,34 +142,8 @@ int main(void)
     // Now find the top ten maximum primes in our range.
     findTopTenPrimes(MIN, MAX);
     
-    //  Write our output to 'primes.txt'.
-
-    ofstream outFile("primes.txt");
-
-    outFile << "<" << executionTime.count() << " ms> ";
-    outFile << "<" << totalNumPrimes << "> ";
-    outFile << "<" << sumPrimes << ">" << endl;
-    
-    outFile << "< ";
-    for (int prime : topTenPrimes)
-        outFile << prime << " ";
-
-    outFile << ">" << endl;
-
-    // Debugging prints
-    // cout << "< " << executionTime.count() << " ms" << " > ";
-    // cout << "< "<< "TOTAL NUM " << totalNumPrimes << " > ";
-    // cout << "< " << "SUM " << sumPrimes << " >" << endl;
-    
-    // cout << "top ten primes" << endl;
-
-    // for (int prime : topTenPrimes)
-    //     cout << prime << " ";
-
-    // cout << endl;
-
-    // Don't forget to close file.
-    outFile.close();
+    // Finally, write our output to 'primes.txt'.
+    printPrimes();
 
     return 0;
 }
