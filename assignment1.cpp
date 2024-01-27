@@ -126,8 +126,8 @@ int main(void)
     }
 
     // Merge threads afterwards.
-    for (auto& t : threads)
-        t.join();
+    for (auto& thread : threads)
+        thread.join();
 
     // Execution end time after all threads complete.
     auto endTime = chrono::high_resolution_clock::now();
