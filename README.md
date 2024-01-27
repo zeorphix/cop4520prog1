@@ -16,4 +16,6 @@ I optimized my program for efficiency dividing the range across multiple threads
 10^5, 10^8, ...
 
 - Instructions
-  
+1. Download 'assignment1.cpp'
+2. Compile by typing 'g++ assignment1.cpp'
+3. Execute the file by typing './a.out'
