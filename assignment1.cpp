@@ -135,9 +135,13 @@ int main(void)
     executionTime = endTime - startTime;
 
     // We skip the number 2 in our algorithm.
-    // So, include that in the total number and sum.
-    ++totalNumPrimes;
-    sumPrimes += 2;
+    // So, include that in the total number and sum,
+    // if the number 2 is included within our range.
+    if (2 >= MIN && 2 <= MAX)
+    {
+        ++totalNumPrimes;
+        sumPrimes += 2;
+    }
 
     // Now find the top ten maximum primes in our range.
     findTopTenPrimes(MIN, MAX);
